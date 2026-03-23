@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta property="og:title" content="🇰🇷 Korea 2026 – Naše cesta">
+<meta property="og:description" content="Soul → Busan | 12.–23. dubna 2026">
+<title>🇰🇷 Korea 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#fff;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;min-height:-webkit-fill-available}
+
+.photo-layer{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center 30%;transition:opacity .6s}
+.photo-layer::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.55) 30%,rgba(0,0,0,.2) 55%,rgba(0,0,0,.35) 100%)}
+.photo-layer.loading{background:#111!important}
+
+.photo-layer-2{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0;transition:opacity .6s}
+.photo-layer-2::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.5) 30%,rgba(0,0,0,.15) 65%,rgba(0,0,0,.3) 100%)}
+
+/* Hero – reduced height: 38vh instead of 52vh */
+.hero{position:fixed;top:0;left:0;right:0;height:38vh;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:0 1.5rem .8rem;pointer-events:none;user-select:none}
+.hero-c{position:relative;z-index:2;max-width:560px}
+.hero-c>*{transition:opacity .35s,transform .35s}
+.hero-c.sw>*{opacity:0;transform:translateY(6px)}
+
+.icon{font-size:2.2rem;line-height:1;margin-bottom:.2rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
+.day-l{font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.08rem;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:1.65rem;font-weight:700;line-height:1.12;text-shadow:0 2px 12px rgba(0,0,0,.8),0 0 40px rgba(0,0,0,.5)}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:.82rem;color:rgba(255,255,255,.7);margin-top:.1rem;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+@media(min-width:768px){.hero{padding:0 3rem 1rem}h1{font-size:2.1rem}.icon{font-size:2.6rem}}
+
+/* Panel starts at 38vh */
+.panel{position:fixed;top:38vh;left:0;right:0;bottom:0;z-index:5;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+.panel-i{min-height:100%;padding:0 1.5rem 5rem}
+@media(min-width:768px){.panel-i{max-width:600px;padding:0 2rem 5rem}}
+.panel-i{transition:opacity .3s;opacity:1}
+.panel-i.sw{opacity:0}
+
+.handle{display:flex;justify-content:center;padding:.5rem 0 .15rem;position:sticky;top:0;z-index:6}
+.handle span{width:30px;height:3.5px;border-radius:2px;background:rgba(255,255,255,.22)}
+
+.badges{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.6rem}
+.badge{display:inline-flex;align-items:center;gap:.25rem;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:.22rem .65rem;font-size:.68rem;font-weight:500;letter-spacing:.03em;color:rgba(255,255,255,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+
+/* Better text readability: stronger shadows + slightly bigger font + background on body text */
+.body{font-size:.9rem;line-height:1.72;color:rgba(255,255,255,.88);margin-bottom:.8rem;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.body strong{color:#fff;font-weight:600}
+
+.sh{font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:1.2rem;margin-bottom:.45rem;padding-top:.7rem;border-top:1px solid rgba(255,255,255,.08)}
+
+.place{display:flex;gap:.7rem;padding:.6rem .4rem;border-bottom:1px solid rgba(255,255,255,.06);text-decoration:none;color:inherit;border-radius:8px;margin:0 -.4rem;padding-left:.4rem;padding-right:.4rem;transition:background .15s}
+.place:last-child{border-bottom:none}
+.place:active{background:rgba(255,255,255,.08)}
+.pi{font-size:1.4rem;flex-shrink:0;width:2rem;text-align:center;padding-top:.05rem}
+.pf{flex:1;min-width:0}
+.pn{font-weight:500;font-size:.87rem;color:rgba(255,255,255,.92);margin-bottom:.05rem}
+.pd{font-size:.78rem;line-height:1.5;color:rgba(255,255,255,.5)}
+.pa{color:rgba(255,255,255,.2);font-size:.75rem;align-self:center;flex-shrink:0}
+
+.tip{display:flex;gap:.55rem;padding:.5rem .65rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.04);border-radius:10px;margin-bottom:.35rem}
+.tw{font-size:1.05rem;flex-shrink:0}
+.tt{font-size:.8rem;line-height:1.55;color:rgba(255,255,255,.65)}
+.tt strong{color:rgba(255,255,255,.9);font-weight:500}
+
+/* Nav dots */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:.55rem 1rem .75rem;background:linear-gradient(0deg,rgba(0,0,0,.7) 60%,transparent)}
+.dots{display:flex;gap:.35rem;align-items:center}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .3s;cursor:pointer;border:none;padding:0;-webkit-appearance:none}
+.dot.on{width:18px;border-radius:2.5px;background:rgba(255,255,255,.75)}
+
+/* Desktop arrows */
+.arr{display:none;position:fixed;top:19vh;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:1rem;color:rgba(255,255,255,.5);z-index:15;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.arr:hover{background:rgba(0,0,0,.5);color:#fff}
+.arr.l{left:.7rem}.arr.r{right:.7rem}
+@media(min-width:768px){.arr{display:flex}}
+
+/* Instagram-style tap zones – invisible, full height */
+.tap-zone{position:fixed;top:0;bottom:50px;z-index:12;width:22%}
+.tap-zone.left{left:0}
+.tap-zone.right{right:0}
+
+/* Title mode */
+body.tm .hero{height:100vh;justify-content:center;align-items:center;text-align:center}
+body.tm .hero-c{display:flex;flex-direction:column;align-items:center}
+body.tm h1{font-size:2.2rem}
+@media(min-width:768px){body.tm h1{font-size:2.8rem}}
+body.tm .panel{display:none}
+body.tm .tap-zone{bottom:0}
+.rt{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.7rem;line-height:1.7;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.sh2{margin-top:1.3rem;font-size:.72rem;color:rgba(255,255,255,.35);letter-spacing:.06em;animation:p 2s ease infinite}
+@keyframes p{0%,100%{opacity:.3}50%{opacity:.55}}
+
+.photo-layer.loading{background:linear-gradient(135deg,#0f1a2e,#1a2d4a 50%,#0f3460)!important}
+</style>
+</head>
+<body>
+
+<div class="photo-layer loading" id="bg"></div>
+<div class="photo-layer-2" id="bg2"></div>
+
+<div class="tap-zone left" id="tapL"></div>
+<div class="tap-zone right" id="tapR"></div>
+
+<div class="hero" id="hero"><div class="hero-c" id="hc"></div></div>
+<div class="panel" id="panel"><div class="handle"><span></span></div><div class="panel-i" id="pc"></div></div>
+<div class="nav"><div class="dots" id="dots"></div></div>
+<div class="arr l" onclick="go(-1)">‹</div>
+<div class="arr r" onclick="go(1)">›</div>
+
+<script>
+// Wikipedia articles – FIXED: day 9 now uses Gyeongju_Historic_Areas (tumuli)
+const WIKI_IMGS=[
+  {main:'Gyeongju',alt:'Bulguksa'},
+  {main:'Hwaseong_Fortress',alt:'Suwon'},
+  {main:'Everland',alt:'Everland'},
+  {main:'Jeonju_Hanok_Village',alt:'Jeonju'},
+  {main:'Maisan',alt:'Hanji'},
+  {main:'Suncheon_Bay',alt:'Suncheon'},
+  {main:'Naganeupseong',alt:'Songgwangsa'},
+  {main:'Tongyeong',alt:'Hallyeohaesang_National_Park'},
+  {main:'Geobukseon',alt:'Tongyeong'},
+  {main:'Gyeongju_Historic_Areas',alt:'Cheomseongdae'},  // FIXED
+  {main:'Bulguksa',alt:'Seokguram'},
+  {main:'Jinhae_District',alt:'Changwon'},
+  {main:'Busan',alt:'Haeundae'}
+];
+
+const imgCache={};
+async function loadWikiImg(a){
+  if(!a)return '';
+  if(imgCache[a])return imgCache[a];
+  try{
+    const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(a)}`);
+    const d=await r.json();
+    const u=d.originalimage?.source||d.thumbnail?.source||'';
+    imgCache[a]=u;return u;
+  }catch(e){return ''}
+}
+
+const bg=document.getElementById('bg'),bg2el=document.getElementById('bg2');
+async function setBg(i){
+  const w=WIKI_IMGS[i];if(!w)return;
+  const u=await loadWikiImg(w.main);
+  if(u){bg.classList.remove('loading');bg.style.backgroundImage=`url(${u})`}
+  const u2=await loadWikiImg(w.alt);
+  if(u2)bg2el.style.backgroundImage=`url(${u2})`;
+  // Preload neighbors
+  if(i+1<WIKI_IMGS.length){loadWikiImg(WIKI_IMGS[i+1].main);loadWikiImg(WIKI_IMGS[i+1].alt)}
+  if(i-1>=0){loadWikiImg(WIKI_IMGS[i-1].main);loadWikiImg(WIKI_IMGS[i-1].alt)}
+}
+
+// Parallax on scroll
+const panel=document.getElementById('panel');
+panel.addEventListener('scroll',()=>{
+  const s=panel.scrollTop;
+  bg2el.style.opacity=Math.min(s/350,1);
+  bg.style.backgroundPositionY=`${30+s*0.04}%`;
+});
+
+const D=[
+{t:1,icon:'🇰🇷',h:'Korea 2026',sub:'Soul → Busan · 12.–23. dubna',route:'Suwon → Jeonju → Suncheon → Tongyeong → Gyeongju → Jinhae → Busan'},
+{icon:'🏯',day:'Den 1 · Ne 12. 4.',h:'Pevnost Hwaseong',sub:'Suwon – UNESCO pod hradbami',drive:'35 min z Soulu',sleep:'Suwon · 2 noci',body:'Vyzvedneme auto a za půl hodiny jsme v <strong>Suwonu</strong>. Odpoledne procházka po hradbách <strong>pevnosti Hwaseong</strong> – UNESCO z roku 1796. Stačí úsek kolem brány <strong>Paldalmun</strong> a vyhlídka <strong>Seojangdae</strong>. Meda se sveze na <strong>dráčkovém vláčku</strong>. Večer street food na <strong>Nammun Marketu</strong>.',places:[['🏯','Hwaseong Fortress','UNESCO pevnost. Hradby, brány, dráčkový vláček.','https://www.google.com/maps/search/Hwaseong+Fortress+Suwon'],['🔬','Samsung Innovation Museum','Od Edisonovy žárovky po AI. Vstup zdarma!','https://www.google.com/maps/search/Samsung+Innovation+Museum+Suwon'],['🛒','Nammun Market','Noční trh, Suwon galbi, hanji papírnictví.','https://www.google.com/maps/search/Suwon+Nammun+Market']],tips:[['👧','Meda','<strong>Dráčkový vláček</strong> po hradbách – každých 30 min!'],['👩','Terezka','<strong>Haengridan-gil</strong> – kavárny a keramika pod hradbami'],['👨','Přemysl','<strong>Samsung Innovation Museum</strong> – online rezervace nutná']]},
+{icon:'🎢',day:'Den 2 · Po 13. 4.',h:'Everland!',sub:'Medin velký den – pandy, safari & kolotoče',sleep:'Suwon · poslední noc',drive:'30 min',body:'Celý den v <strong>Everlandu</strong>! Meda (100 cm) zvládne: <strong>Safari World</strong>, <strong>Lost Valley</strong> (žirafy!), <strong>Flash Pang Pang</strong>, <strong>Racing Coaster</strong>, <strong>Thunder Falls</strong>. Plus pandy 🐼 bez výškového limitu. Stáhněte <strong>Everland App</strong> předem!',places:[['🎢','Everland','Největší zábavní park Koreje. 5 zón, zoo, safari.','https://www.google.com/maps/search/Everland+Yongin'],['🐼','Panda World','Dvojčata Luibao & Huibao.','https://www.google.com/maps/search/Everland+Panda+World+Yongin'],['🌷','Four Seasons Garden','Tulipány v dubnu! Moonlight Parade večer.','https://www.google.com/maps/search/Everland+Four+Seasons+Garden']],tips:[['👧','Meda','✅ Safari, Lost Valley, Flash Pang Pang, Racing Coaster, Thunder Falls. ❌ T-Express (130cm).'],['💡','Tip','Pondělí = méně lidí. Přijďte k otevření!']]},
+{icon:'🏘️',day:'Den 3 · Út 14. 4.',h:'Jeonju Hanok Village',sub:'800 domů, hanbok & bibimbap',drive:'2,5 h ze Suwonu',sleep:'Jeonju · 2 noci',body:'Cesta do <strong>Jeonju</strong>. Oběd: <strong>bibimbap</strong> v jeho rodném městě! Odpoledne <strong>Hanok Village</strong>: 800 tradičních domů. <strong>Půjčíme hanbok</strong> – Meda bude hvězda! V hanboku vstup do památek zdarma.',places:[['🏘️','Hanok Village','800+ hanok domů. Hanbok, kavárny, street food.','https://www.google.com/maps/search/Jeonju+Hanok+Village+전주한옥마을'],['⛩️','Gyeonggijeon Shrine','Královský chrám. V hanboku vstup free!','https://www.google.com/maps/search/Gyeonggijeon+Shrine+Jeonju+경기전'],['🍚','Bibimbap Alley','Autentický jeonjuský bibimbap.','https://www.google.com/maps/search/Jeonju+Hanok+Village+bibimbap']],tips:[['👧','Meda','<strong>Hanbok!</strong> ~15 000 KRW/2h. Pohádkové fotky.'],['👩','Terezka','Boční uličky = <strong>kavárny a lokální keramici</strong>']]},
+{icon:'📜',day:'Den 4 · St 15. 4.',h:'Hanji & Maisan',sub:'Terezčin den – papírnictví + skalní unikát',sleep:'Jeonju · poslední noc',body:'Dopoledne <strong>Hanji Museum</strong> – workshop výroby korejského papíru. Odpoledne <strong>Maisan</strong> (40 min) – dvě skalní věže + <strong>chrám Tapsa</strong> s 80+ kamennými pagodami bez malty.',places:[['📜','Hanji Museum','Workshop tradičního papíru. Meda pomáhá!','https://www.google.com/maps/search/Jeonju+Hanji+Museum+전주한지박물관'],['⛰️','Maisan','Dva skalní „koňské uši" (687 m).','https://www.google.com/maps/search/Maisan+Provincial+Park+마이산'],['🪨','Tapsa Temple','80+ pagod bez malty. Dílo jednoho mnicha.','https://www.google.com/maps/search/Tapsa+Temple+Maisan+탑사']],tips:[['👩','Terezka','Hanji workshop = <strong>TOP highlight pro tebe</strong>.'],['👧','Meda','Tapsa – „kdo to naskládal?!" Cesta 30 min, kočárek OK.']]},
+{icon:'🌺',day:'Den 5 · Čt 16. 4.',h:'Suncheon Bay Garden',sub:'Nejkrásnější zahrada Koreje + obří hřiště',drive:'2 h z Jeonju',sleep:'Suncheon · 2 noci',body:'<strong>National Garden</strong> – zahrady z celého světa + <strong>obří hřiště</strong> pro Medu. <strong>Sky Cube</strong> monorail. Západ slunce: <strong>Suncheon Bay Wetland</strong> – rákosové mokřady.',places:[['🌺','National Garden','Zahrady + obří hřiště + Dream Bridge.','https://www.google.com/maps/search/Suncheon+Bay+National+Garden+순천만국가정원'],['🦅','Wetland','Mokřad, ptáci, Sky Walk.','https://www.google.com/maps/search/Suncheon+Bay+Wetland+순천만습지'],['🚂','Sky Cube','Bezpilotní monorail!','https://www.google.com/maps/search/Suncheon+Sky+Cube+순천스카이큐브']],tips:[['👧','Meda','Hřiště <strong>OBROVSKÉ</strong> + Sky Cube monorail!'],['👨','Přemysl','Wetland – <strong>bioacoustika ptáků</strong>']]},
+{icon:'🏰',day:'Den 6 · Pá 17. 4.',h:'Naganeupseong',sub:'Živá středověká vesnice + UNESCO klášter',sleep:'Suncheon · poslední noc',body:'<strong>Naganeupseong</strong> – opevněná vesnice kde <strong>žijí lidé</strong>. Hradby, keramické dílny. Odpoledne <strong>Songgwangsa</strong> – „klenotní chrám", <strong>UNESCO Sansa</strong>.',places:[['🏰','Naganeupseong','Živá vesnice! Hradby, keramika.','https://www.google.com/maps/search/Naganeupseong+Folk+Village+낙안읍성'],['🛕','Songgwangsa','UNESCO Sansa. 2 km lesem.','https://www.google.com/maps/search/Songgwangsa+Temple+Suncheon+송광사']],tips:[['👩','Terezka','<strong>Keramické dílny</strong> v Naganeupseong.'],['👧','Meda','Lézt po hradbách + tradiční hry.']]},
+{icon:'🚡',day:'Den 7 · So 18. 4.',h:'Tongyeong',sub:'Neapol Koreje – lanovka nad ostrovy',drive:'2 h ze Suncheon',sleep:'Tongyeong · 2 noci',body:'<strong>Lanovka na Mireuksan</strong> – stovky ostrůvků pod nohama. <strong>Dongpirang</strong> – street art vesnice. <strong>Podvodní tunel</strong> (483 m) – pod mořem!',places:[['🚡','Cable Car','Lanovka, dechberoucí panorama.','https://www.google.com/maps/search/Tongyeong+Cable+Car+통영케이블카'],['🎨','Dongpirang','Street art na každém domě.','https://www.google.com/maps/search/Dongpirang+Mural+Village+Tongyeong+동피랑벽화마을'],['🌊','Undersea Tunnel','483m POD MOŘEM (1932)!','https://www.google.com/maps/search/Tongyeong+Undersea+Tunnel+통영해저터널']],tips:[['👧','Meda','Lanovka = WOW! Tunel = „jdeme pod mořem!"'],['👩','Terezka','Dongpirang = <strong>open-air galerie</strong>.']]},
+{icon:'🚢',day:'Den 8 · Ne 19. 4.',h:'Želví loď & ostrovy',sub:'Tátův den – admirál Yi & lodní výlet',sleep:'Tongyeong · poslední noc',body:'<strong>Yi Sun-sin Park</strong> – replika <strong>želví lodě</strong> s dračí hlavou. Odpoledne <strong>lodní výlet</strong> mezi ostrůvky (2–3h). Večer sashimi v přístavu.',places:[['🚢','Yi Sun-sin Park','Želví loď! Muzeum admirála.','https://www.google.com/maps/search/Yi+Sun+sin+Park+Tongyeong+이순신공원'],['🏝️','Island Cruise','2–3h plavba. Hallyeo NP.','https://www.google.com/maps/search/Hallyeohaesang+National+Park+Tongyeong+한려해상국립공원']],tips:[['👨','Přemysl','<strong>TOP den!</strong> Želví loď – obrněná, napřed o staletí.'],['👧','Meda','Na lodi prostor k běhání.']]},
+{icon:'⛰️',day:'Den 9 · Po 20. 4.',h:'Královské mohyly',sub:'Gyeongju – tisíciletá říše Silla',drive:'2,5 h z Tongyeongu',sleep:'Gyeongju · 2 noci',body:'<strong>Tumuli Park</strong> – obří travnaté mohyly, Meda po nich leze! Do Cheonmachong se vstupuje. <strong>Cheomseongdae</strong> – nejstarší observatoř v Asii (647 n.l.). Večer <strong>Anapji Pond</strong> nasvícená – magické!',places:[['⛰️','Tumuli Park','23 královských mohyl. Lezení!','https://www.google.com/maps/search/Daereungwon+Tomb+Complex+Gyeongju+대릉원'],['🔭','Cheomseongdae','Nejstarší observatoř v Asii (647).','https://www.google.com/maps/search/Cheomseongdae+Observatory+Gyeongju+첨성대'],['🌙','Anapji Pond','Po setmění nasvícený. WOW.','https://www.google.com/maps/search/Donggung+Palace+Wolji+Pond+Gyeongju+동궁과월지']],tips:[['👧','Meda','Mohyly = <strong>travnaté kopce na lezení</strong>!'],['💡','Tip','Anapji <strong>po setmění</strong> (od ~19:30).']]},
+{icon:'🛕',day:'Den 10 · Út 21. 4.',h:'Bulguksa & Seokguram',sub:'Nejslavnější chrám Koreje · UNESCO',sleep:'Gyeongju · poslední noc',body:'<strong>Bulguksa</strong> – chrám z roku 751, UNESCO. Dvě pagody, malované stropy, draci. <strong>Seokguram</strong> – Buddha s výhledem na moře. <strong>National Museum</strong> – zlaté koruny, vstup zdarma!',places:[['🛕','Bulguksa','Nejkrásnější chrám Koreje. UNESCO.','https://www.google.com/maps/search/Bulguksa+Temple+Gyeongju+불국사'],['🧘','Seokguram','Buddha v jeskyni. Shuttle bus.','https://www.google.com/maps/search/Seokguram+Grotto+Gyeongju+석굴암'],['🏛️','National Museum','Zlaté koruny. Vstup zdarma!','https://www.google.com/maps/search/Gyeongju+National+Museum+국립경주박물관']],tips:[['👧','Meda','Hledejte <strong>skryté draky</strong> pod střechami!'],['👩','Terezka','Ráno = <strong>nejlepší světlo pro fotky</strong>.']]},
+{icon:'🔱',day:'Den 11 · St 22. 4.',h:'PONORKA!',sub:'Jinhae – skutečná ponorka',drive:'1,5 h z Gyeongju',sleep:'Jinhae · 1 noc',body:'<strong>Skutečná ponorka</strong> v Naval Port Historical Park! Torpéda, velitelský můstek, periskop. Pak <strong>Yeojwacheon Stream</strong> a <strong>Gyeonghwa Station</strong>.',places:[['🔱','Naval Historical Park','Ponorka! Periskop, torpéda.','https://www.google.com/maps/search/Jinhae+Naval+Port+Historical+Park+진해해군사관학교'],['🌸','Yeojwacheon','Potok s třešněmi.','https://www.google.com/maps/search/Yeojwacheon+Stream+Jinhae+여좌천'],['🚂','Gyeonghwa Station','Opuštěné nádraží v třešních.','https://www.google.com/maps/search/Gyeonghwa+Station+Jinhae+경화역']],tips:[['👨','Přemysl','<strong>PONORKA!</strong> Periskop, torpéda, kajuty.'],['👧','Meda','„Jsme pod vodou!" Děti to milují.']]},
+{icon:'🎉',day:'Den 12 · Čt 23. 4.',h:'Busan!',sub:'Cíl cesty',drive:'40 min',sleep:'Busan',body:'Odevzdáme auto.<br><br><strong>12 dní · 6 základen · 3 UNESCO<br>1 ponorka · ∞ vzpomínek</strong> 🎊',places:[['🏖️','Busan','Pláže, chrámy, street food.','https://www.google.com/maps/search/Busan+South+Korea']],tips:[['❤️','','Korea vás bude milovat. 💕']]}
+];
+
+const hc=document.getElementById('hc'),pc=document.getElementById('pc'),dotsC=document.getElementById('dots');
+let cur=0;
+D.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' on':'');d.onclick=()=>goTo(i);dotsC.appendChild(d)});
+const dots=[...dotsC.children];
+
+function render(i){
+  const d=D[i];
+  document.body.classList.toggle('tm',!!d.t);
+  setBg(i);
+  bg2el.style.opacity=0;
+  bg.style.backgroundPositionY='30%';
+  let hh=`<div class="icon">${d.icon}</div>`;
+  if(d.day)hh+=`<div class="day-l">${d.day}</div>`;
+  hh+=`<h1>${d.h}</h1>`;
+  if(d.sub)hh+=`<div class="hero-sub">${d.sub}</div>`;
+  if(d.t)hh+=`<div class="rt">${d.route}</div><div class="sh2">klikni vpravo →</div>`;
+  hc.innerHTML=hh;
+  if(d.t){pc.innerHTML='';return}
+  let pp='<div class="badges">';
+  if(d.drive)pp+=`<span class="badge">🚗 ${d.drive}</span>`;
+  if(d.sleep)pp+=`<span class="badge">🛏️ ${d.sleep}</span>`;
+  pp+=`</div><p class="body">${d.body}</p>`;
+  if(d.places?.length){
+    pp+='<div class="sh">📍 Kam se podíváme</div>';
+    d.places.forEach(([ic,n,ds,u])=>{pp+=`<a class="place" href="${u}" target="_blank" rel="noopener"><div class="pi">${ic}</div><div class="pf"><div class="pn">${n}</div><div class="pd">${ds}</div></div><div class="pa">›</div></a>`});
+  }
+  if(d.tips?.length){
+    pp+='<div class="sh">💡 Tipy</div>';
+    d.tips.forEach(([w,n,t])=>{pp+=`<div class="tip"><div class="tw">${w}</div><div class="tt">${n?'<strong>'+n+'</strong> · ':''}${t}</div></div>`});
+  }
+  pc.innerHTML=pp;
+  panel.scrollTop=0;
+}
+
+function goTo(n){
+  if(n<0||n>=D.length||n===cur)return;
+  hc.classList.add('sw');pc.classList.add('sw');
+  setTimeout(()=>{cur=n;render(n);dots.forEach((d,i)=>d.classList.toggle('on',i===n));hc.classList.remove('sw');pc.classList.remove('sw')},220);
+}
+function go(dir){goTo(cur+dir)}
+render(0);
+
+// Keyboard
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1)});
+
+// Instagram-style tap zones
+document.getElementById('tapL').addEventListener('click',()=>go(-1));
+document.getElementById('tapR').addEventListener('click',()=>go(1));
+
+// Swipe on BOTH hero AND panel (horizontal only)
+let tx=0,ty=0,swiping=false;
+function swipeStart(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;swiping=true}
+function swipeEnd(e){
+  if(!swiping)return;swiping=false;
+  const dx=e.changedTouches[0].clientX-tx;
+  const dy=e.changedTouches[0].clientY-ty;
+  // Only trigger if horizontal swipe is dominant and big enough
+  if(Math.abs(dx)>Math.abs(dy)*1.3 && Math.abs(dx)>45){
+    go(dx<0?1:-1);
+  }
+}
+
+// Hero swipe
+const hero=document.getElementById('hero');
+hero.style.pointerEvents='auto';
+hero.addEventListener('touchstart',swipeStart,{passive:true});
+hero.addEventListener('touchend',swipeEnd,{passive:true});
+
+// Panel swipe – only trigger horizontal, let vertical scroll through
+panel.addEventListener('touchstart',swipeStart,{passive:true});
+panel.addEventListener('touchend',swipeEnd,{passive:true});
+</script>
+</body>
+</html>
