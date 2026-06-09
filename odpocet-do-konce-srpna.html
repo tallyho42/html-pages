@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Odpočet do konce srpna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sea-deep:#08222e;
+    --sea:#103a4c;
+    --sand:#e9b153;
+    --foam:#eef4f6;
+    --muted:#86a4af;
+    --line:rgba(134,164,175,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Inter",-apple-system,system-ui,sans-serif;
+    color:var(--foam);
+    background:radial-gradient(120% 90% at 50% 0%, #154456 0%, var(--sea-deep) 60%, #051820 100%);
+    min-height:100dvh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:clamp(20px,6vw,48px);
+    padding-bottom:max(24px,env(safe-area-inset-bottom));
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* horizon glow = the lighthouse / harbour */
+  body::before{
+    content:"";position:fixed;inset:auto 0 0 0;height:55%;pointer-events:none;
+    background:radial-gradient(70% 120% at 50% 100%, rgba(233,177,83,.16), transparent 70%);
+  }
+  .card{position:relative;width:100%;max-width:520px;text-align:center;z-index:1}
+
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--muted);font-weight:600;margin-bottom:clamp(20px,5vw,34px);
+  }
+
+  .count{
+    font-family:"Fraunces",Georgia,serif;
+    font-weight:300;line-height:.85;
+    font-size:clamp(6.5rem,38vw,13rem);
+    letter-spacing:-.02em;
+    color:var(--foam);
+    font-variant-numeric:tabular-nums;
+  }
+  .count.done{color:var(--sand);font-size:clamp(3.4rem,14vw,5.5rem)}
+
+  .unit{
+    font-family:"Fraunces",serif;font-weight:600;
+    font-size:clamp(1.05rem,5vw,1.4rem);
+    color:var(--sand);margin-top:14px;letter-spacing:.01em;
+  }
+  .sub{color:var(--muted);font-size:.92rem;margin-top:8px}
+
+  /* voyage progress */
+  .voyage{margin-top:clamp(34px,8vw,52px)}
+  .track{
+    position:relative;height:2px;background:var(--line);border-radius:2px;
+  }
+  .track .done-bar{position:absolute;inset:0 auto 0 0;background:var(--sand);border-radius:2px;transition:width .9s ease}
+  .ship{
+    position:absolute;top:50%;transform:translate(-50%,-50%);
+    font-size:1.05rem;transition:left .9s ease;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))
+  }
+  .ends{display:flex;justify-content:space-between;margin-top:14px;font-size:.74rem;color:var(--muted);letter-spacing:.04em}
+
+  .next{
+    margin-top:clamp(30px,7vw,46px);
+    border-top:1px solid var(--line);padding-top:22px;
+    font-size:.9rem;color:var(--muted);line-height:1.55;
+  }
+  .next b{color:var(--foam);font-weight:600}
+
+  @media (prefers-reduced-motion:reduce){
+    .done-bar,.ship{transition:none}
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="eyebrow">Do konce srpna</div>
+    <div id="count" class="count">–</div>
+    <div id="unit" class="unit"></div>
+    <div id="sub" class="sub"></div>
+
+    <div class="voyage" id="voyage">
+      <div class="track">
+        <div class="done-bar" id="bar" style="width:0%"></div>
+        <div class="ship" id="ship" style="left:0%">⛵</div>
+      </div>
+      <div class="ends">
+        <span id="startLabel">dnes</span>
+        <span>31. 8.</span>
+      </div>
+    </div>
+
+    <div class="next" id="next"></div>
+  </main>
+
+<script>
+(function(){
+  // ---- nastavení (rok 2026) ----
+  var END = new Date(2026, 7, 31); // 31.8.2026 (měsíc 0-indexovaný)
+
+  // státní svátky v období
+  var holidays = ["2026-07-05","2026-07-06"];
+
+  // dovolená (včetně okrajů)
+  var vacationRanges = [
+    ["2026-07-07","2026-07-08"],
+    ["2026-08-10","2026-08-14"],
+    ["2026-08-20","2026-08-30"]
+  ];
+
+  function key(d){
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  }
+  function parse(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+
+  // sestav set volných dní
+  var off = {};
+  holidays.forEach(function(h){off[h]=true;});
+  vacationRanges.forEach(function(r){
+    var d=parse(r[0]), end=parse(r[1]);
+    while(d<=end){off[key(d)]=true;d.setDate(d.getDate()+1);}
+  });
+
+  function isWorkday(d){
+    var wd=d.getDay(); // 0 ne, 6 so
+    return wd!==0 && wd!==6 && !off[key(d)];
+  }
+
+  var today = new Date();
+  today.setHours(0,0,0,0);
+
+  // spočti zbývající pracovní dny (včetně dneška, pokud je pracovní)
+  var remaining=0, firstWork=null;
+  var d=new Date(today);
+  while(d<=END){
+    if(isWorkday(d)){remaining++; if(!firstWork) firstWork=new Date(d);}
+    d.setDate(d.getDate()+1);
+  }
+
+  // celkový rozsah od dneška do konce pro vizuální progres
+  var totalDays = Math.round((END - today)/86400000)+1;
+
+  var elCount=document.getElementById("count"),
+      elUnit=document.getElementById("unit"),
+      elSub=document.getElementById("sub"),
+      elBar=document.getElementById("bar"),
+      elShip=document.getElementById("ship"),
+      elNext=document.getElementById("next"),
+      elVoyage=document.getElementById("voyage");
+
+  function plural(n){
+    if(n===1) return "pracovní den";
+    if(n>=2 && n<=4) return "pracovní dny";
+    return "pracovních dní";
+  }
+
+  if(today>END){
+    elCount.textContent="V přístavu";
+    elCount.classList.add("done");
+    elUnit.textContent="";
+    elSub.textContent="Kapitola uzavřena.";
+    elVoyage.style.display="none";
+    elNext.innerHTML="Konec srpna je za tebou. Odplutí z Air Bank bylo správné rozhodnutí — a začátek toho, kým chceš být.";
+    return;
+  }
+
+  elCount.textContent=remaining;
+  elUnit.textContent=plural(remaining);
+
+  // datum dneška hezky
+  var months=["ledna","února","března","dubna","května","června","července","srpna","září","října","listopadu","prosince"];
+  elSub.textContent=today.getDate()+". "+months[today.getMonth()]+" "+today.getFullYear();
+
+  // progres = uplynulá část plavby
+  var pct = Math.max(0, Math.min(100, ((totalDays - (Math.round((END-today)/86400000)+1)) / totalDays)*100));
+  // lépe: poloha lodi podle uplynulých dní z celkového rozsahu
+  var elapsed = totalDays>1 ? 0 : 100;
+  // loď začíná dnes (0%) a doplouvá k 31.8. — zobraz aktuální pozici jako 0 a kotvu na konci
+  requestAnimationFrame(function(){
+    elBar.style.width="2%";
+    elShip.style.left="2%";
+  });
+
+  // další milník: nejbližší volný blok (dovolená/víkend) nebo cíl
+  function nextVacationStart(){
+    var dd=new Date(today);
+    // najdi první den, který je dovolená (ne víkend, ne svátek-jen-pro-info) v budoucnu
+    var ranges=vacationRanges.map(function(r){return [parse(r[0]),parse(r[1])];});
+    var soonest=null;
+    ranges.forEach(function(r){
+      if(r[1]>=today){ if(!soonest || r[0]<soonest[0]) soonest=r; }
+    });
+    return soonest;
+  }
+  var nv=nextVacationStart();
+  var msg="";
+  if(nv){
+    var s=nv[0], e=nv[1];
+    if(s<=today && today<=e){
+      msg="Právě jsi na <b>dovolené</b> (do "+e.getDate()+". "+months[e.getMonth()]+"). Užij si to.";
+    }else{
+      // pracovní dny do začátku dovolené
+      var wk=0, dd2=new Date(today);
+      while(dd2<s){ if(isWorkday(dd2)) wk++; dd2.setDate(dd2.getDate()+1); }
+      msg="Do nejbližší dovolené (<b>"+s.getDate()+". "+months[s.getMonth()]+"</b>) zbývá "+wk+" "+plural(wk)+".";
+    }
+  }else{
+    msg="Poslední pracovní den je <b>31. srpna</b>.";
+  }
+  elNext.innerHTML=msg;
+})();
+</script>
+</body>
+</html>
